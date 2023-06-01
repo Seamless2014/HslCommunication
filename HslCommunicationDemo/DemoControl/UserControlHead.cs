@@ -53,7 +53,7 @@ namespace HslCommunicationDemo.DemoControl
 				linkLabel1.Visible = false;
 			}
 
-			BackColor = FormSelect.ThemeColor;
+			BackColor = FormMain.ThemeColor;
 		}
 
 		[Browsable(true)]
@@ -97,6 +97,16 @@ namespace HslCommunicationDemo.DemoControl
 			get => linkLabel3.Visible;
 			set => linkLabel3.Visible = value;
 		}
+
+		[Browsable( true )]
+		[Category( "HslCommunicationDemo" )]
+		[DefaultValue( true )]
+		public bool SaveDeviceVisiable
+		{
+			get => linkLabel2.Visible;
+			set => linkLabel2.Visible = value;
+		}
+
 
 		private void linkLabel2_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
 		{

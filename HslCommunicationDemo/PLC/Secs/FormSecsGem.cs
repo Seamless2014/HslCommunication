@@ -14,6 +14,8 @@ using System.Threading;
 using System.IO.Ports;
 using System.Xml.Linq;
 using HslCommunication.Secs.Helper;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunicationDemo
 {
@@ -29,6 +31,8 @@ namespace HslCommunicationDemo
 		private void FormSiemens_Load( object sender, EventArgs e )
 		{
 			panel2.Enabled = false;
+			comboBox1.SelectedIndex = 1;
+			comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
 			Language( Program.Language );
 
 			StringBuilder stringBuilder = new StringBuilder( "Example：" );
@@ -50,12 +54,12 @@ namespace HslCommunicationDemo
 
 			TreeNode s1Node = new TreeNode( "S1" );
 			AddTree( s1Node, new SecsTreeItem( 1, 1,  true,  null, "Are You Online" ) );
-			AddTree( s1Node, new SecsTreeItem( 1, 3,  true,  new SecsValue(new object[] { (uint)1, (uint)2 } ), "Selected Equipment Status" ) );
+			AddTree( s1Node, new SecsTreeItem( 1, 3,  true,  new SecsValue( new object[] { (uint)1, (uint)2 } ), "Selected Equipment Status" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 5,  true,  new SecsValue( new byte[] { 0x01 } ), "Formatted Status" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 7,  false, new SecsValue( new byte[] { 0x01 } ), "Fixed Form Request" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 9,  true,  null, "Material Transfer Status" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 11, true,  new SecsValue(new object[] { (uint)1, (uint)2 } ), "Status Variable Namelist" ) );
-			AddTree( s1Node, new SecsTreeItem( 1, 13, true,  null, "Establish Communications" ) );
+			AddTree( s1Node, new SecsTreeItem( 1, 13, true,  new SecsValue( new object[] { new byte[] { 0x01 }, new object[0]  } ), "Establish Communications" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 15, true,  null, "Request OFF-LINE" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 17, true,  null, "Request ON-LINE" ) );
 			AddTree( s1Node, new SecsTreeItem( 1, 19, true,  new SecsValue( new object[] { "object class name", new object[] { "Job0001", "Job0002" }, new object[] { "attribute1", "attribute2" } } ), "Get Attribute" ) );
@@ -83,15 +87,17 @@ namespace HslCommunicationDemo
 			AddTree( s2Node, new SecsTreeItem( 2, 33, true, new SecsValue( new object[] { (uint)1, new object[] { new object[] { (uint)4, new object[] { "810" } } } } ), "Define Report" ) );
 			AddTree( s2Node, new SecsTreeItem( 2, 35, true, new SecsValue( new object[] { (uint)1, new object[] { new object[] { (uint)4050, new object[] { (uint)1 } } } } ), "Link Event Report" ) );
 			AddTree( s2Node, new SecsTreeItem( 2, 37, true, new SecsValue( new object[] { (uint)1, new object[] { new object[] { (uint)4050, new object[] { (uint)1 } } } } ), "Enable/Disable Event Report" ) );
+			AddTree( s2Node, new SecsTreeItem( 2, 39, true, new SecsValue( new object[] { (uint)1, (uint)649 } ), "Multi-block Inquire" ) );
+			AddTree( s2Node, new SecsTreeItem( 2, 41, true, new SecsValue( new object[] { "pause", new object[] { new object[] { "ppexecname", "cmos168-zl0EC" } } } ), "Host Command Send" ) );
 			treeView1.Nodes.Add( s2Node );
 
 
 			TreeNode s3Node = new TreeNode( "S3" );
-			AddTree( s3Node, new SecsTreeItem( 3, 1, true, null, "Material Status" ) );
-			AddTree( s3Node, new SecsTreeItem( 3, 3, true, null, "Time to Completion Data" ) );
-			AddTree( s3Node, new SecsTreeItem( 3, 5, true, new SecsValue( new object[] { new byte[] { 0x01 }, new byte[] { 0x18 } } ), "Material Found Send" ) );
-			AddTree( s3Node, new SecsTreeItem( 3, 7, true, new SecsValue( new object[] { new byte[] { 0x01 }, new byte[] { 0x18 }, "ee052793.1" } ), "Material Lost Send" ) );
-			AddTree( s3Node, new SecsTreeItem( 3, 9, true, new SecsValue( new object[] { "ee052793.1", "1" } ), "Matl ID Equate Send" ) );
+			AddTree( s3Node, new SecsTreeItem( 3, 1, true,  null, "Material Status" ) );
+			AddTree( s3Node, new SecsTreeItem( 3, 3, true,  null, "Time to Completion Data" ) );
+			AddTree( s3Node, new SecsTreeItem( 3, 5, true,  new SecsValue( new object[] { new byte[] { 0x01 }, new byte[] { 0x18 } } ), "Material Found Send" ) );
+			AddTree( s3Node, new SecsTreeItem( 3, 7, true,  new SecsValue( new object[] { new byte[] { 0x01 }, new byte[] { 0x18 }, "ee052793.1" } ), "Material Lost Send" ) );
+			AddTree( s3Node, new SecsTreeItem( 3, 9, true,  new SecsValue( new object[] { "ee052793.1", "1" } ), "Matl ID Equate Send" ) );
 			AddTree( s3Node, new SecsTreeItem( 3, 11, true, new SecsValue( (byte)1 ), "Matl ID Request" ) );
 			AddTree( s3Node, new SecsTreeItem( 3, 13, true, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Matl ID Send" ) );
 			AddTree( s3Node, new SecsTreeItem( 3, 17, true, new SecsValue( new object[] { (uint)1, "ProceedWithCarrier", "CSX 52078", (byte)1, new object[] { new object[] { "Usage", "product" } } } ), "Carrier Action Request" ) );
@@ -107,24 +113,24 @@ namespace HslCommunicationDemo
 
 
 			TreeNode s4Node = new TreeNode( "S4" );
-			AddTree( s4Node, new SecsTreeItem( 4, 1, true, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Ready to Send Materials" ) );
-			AddTree( s4Node, new SecsTreeItem( 4, 3, false, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Send Material" ) );
-			AddTree( s4Node, new SecsTreeItem( 4, 5, false, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Handshake Complete" ) );
-			AddTree( s4Node, new SecsTreeItem( 4, 9, false, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Stuck in Sender" ) );
+			AddTree( s4Node, new SecsTreeItem( 4, 1, true,   new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Ready to Send Materials" ) );
+			AddTree( s4Node, new SecsTreeItem( 4, 3, false,  new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Send Material" ) );
+			AddTree( s4Node, new SecsTreeItem( 4, 5, false,  new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Handshake Complete" ) );
+			AddTree( s4Node, new SecsTreeItem( 4, 9, false,  new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Stuck in Sender" ) );
 			AddTree( s4Node, new SecsTreeItem( 4, 11, false, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Stuck in Receiver" ) );
 			AddTree( s4Node, new SecsTreeItem( 4, 13, false, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Send Incomplete Timeout" ) );
 			AddTree( s4Node, new SecsTreeItem( 4, 15, false, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Material Received" ) );
-			AddTree( s4Node, new SecsTreeItem( 4, 17, true, new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Request to Receive" ) );
-			AddTree( s4Node, new SecsTreeItem( 4, 19, true, new SecsValue( new object[] { (uint)1, new object[] { "TJH_U_M_E1086", new object[] { (uint)3, (uint)1, "c000678", (uint)7, (byte)1, 
+			AddTree( s4Node, new SecsTreeItem( 4, 17, true,  new SecsValue( new object[] { (byte)1, "ee052793.1" } ), "Request to Receive" ) );
+			AddTree( s4Node, new SecsTreeItem( 4, 19, true,  new SecsValue( new object[] { (uint)1, new object[] { "TJH_U_M_E1086", new object[] { (uint)3, (uint)1, "c000678", (uint)7, (byte)1, 
 				"standard exchange", "AGV0001", (uint)1, (byte)1,(byte)1, (uint)1, "TF:1 0" } } } ), "Transfer Job Create" ) );
-			AddTree( s4Node, new SecsTreeItem( 4, 21, true, new SecsValue( new object[]{ new byte[] { 0x60 }, "PAUSE", new object[] { new object[] { "ppexecname", "cmos168-zl0EC3" } } } ), "Transfer Job Command" ) );
+			AddTree( s4Node, new SecsTreeItem( 4, 21, true,  new SecsValue( new object[]{ new byte[] { 0x60 }, "PAUSE", new object[] { new object[] { "ppexecname", "cmos168-zl0EC3" } } } ), "Transfer Job Command" ) );
 			treeView1.Nodes.Add( s4Node );
 
 			TreeNode s5Node = new TreeNode( "S5" );;
-			AddTree( s5Node, new SecsTreeItem( 5, 3, true, new SecsValue( new object[] { new byte[] { 0x00 }, (uint)1000 } ), "Enable/Disable Alarm Send" ) );
-			AddTree( s5Node, new SecsTreeItem( 5, 5, true, new SecsValue( (uint)0 ), "List Alarms Request" ) );
-			AddTree( s5Node, new SecsTreeItem( 5, 7, true, null, "List Enabled Alarm Request" ) );
-			AddTree( s5Node, new SecsTreeItem( 5, 9, true, new SecsValue( new object[] { "YYMMDDHHMMSS", "out of ink", "ALARM", "ink not sensed at nozzle inlet", new object[] { "manually insert new ink cartridge" } } ), "Exception Post Notify" ) );
+			AddTree( s5Node, new SecsTreeItem( 5, 3, true,  new SecsValue( new object[] { new byte[] { 0x00 }, (uint)1000 } ), "Enable/Disable Alarm Send" ) );
+			AddTree( s5Node, new SecsTreeItem( 5, 5, true,  new SecsValue( (uint)0 ), "List Alarms Request" ) );
+			AddTree( s5Node, new SecsTreeItem( 5, 7, true,  null, "List Enabled Alarm Request" ) );
+			AddTree( s5Node, new SecsTreeItem( 5, 9, true,  new SecsValue( new object[] { "YYMMDDHHMMSS", "out of ink", "ALARM", "ink not sensed at nozzle inlet", new object[] { "manually insert new ink cartridge" } } ), "Exception Post Notify" ) );
 			AddTree( s5Node, new SecsTreeItem( 5, 11, true, new SecsValue( new object[] { "YYMMDDHHMMSS", "out of ink", "ALARM", "ink not sensed at nozzle inlet" } ), "Exception Clear Notify" ) );
 			AddTree( s5Node, new SecsTreeItem( 5, 13, true, new SecsValue( new object[] { "out of ink", "manually insert new ink cartridge" } ), "Exception Recover Request" ) );
 			AddTree( s5Node, new SecsTreeItem( 5, 17, true, new SecsValue( "out of ink" ), "Exception Recovery Abort Request" ) );
@@ -138,14 +144,33 @@ namespace HslCommunicationDemo
 			AddTree( s6Node, new SecsTreeItem( 6, 9, true, new SecsValue( new object[] { new byte[] { 0x02 }, (uint)1, (uint)4050, new object[] { new object[] { "12", new object[] { "54" } } } } ), "Formatted Variable Send" ) );
 			treeView1.Nodes.Add( s6Node );
 
+			TreeNode s7Node = new TreeNode( "S7" );
+			AddTree( s7Node, new SecsTreeItem( 7, 1, true, new SecsValue( new object[] { "banana", (uint)322 } ), "Process Program Load Inquire" ) );
+			AddTree( s7Node, new SecsTreeItem( 7, 3, true, new SecsValue( new object[] { "banana", new byte[] { 0x00 } } ), "Process Program Send\t" ) );
+
 			treeView1.AfterSelect += TreeView1_AfterSelect;
+		}
+
+		private void ComboBox1_SelectedIndexChanged( object sender, EventArgs e )
+		{
+			if (secs != null)
+			{
+				switch (comboBox1.SelectedIndex)
+				{
+					case 0: secs.StringEncoding = Encoding.ASCII; break;
+					case 1: secs.StringEncoding = Encoding.Default; break;
+					case 2: secs.StringEncoding = Encoding.UTF8; break;
+					case 3: secs.StringEncoding = Encoding.Unicode; break;
+					case 4: secs.StringEncoding = Encoding.GetEncoding( "gb2312" ); break;
+				}
+			}
 		}
 
 		private void TreeView1_AfterSelect( object sender, TreeViewEventArgs e )
 		{
 			if (e.Node.Tag is SecsTreeItem treeItem)
 			{
-				textBox_stream.Text = treeItem.S.ToString( );
+				textBox_stream.Text   = treeItem.S.ToString( );
 				textBox_function.Text = treeItem.F.ToString( );
 				checkBox_back.Checked = treeItem.W;
 
@@ -165,13 +190,14 @@ namespace HslCommunicationDemo
 
 		public class SecsTreeItem
 		{
-			public SecsTreeItem( byte s, byte f, bool w, SecsValue value, string decs )
+			public SecsTreeItem( byte s, byte f, bool w, SecsValue value, string decs, SecsValue singular = null )
 			{
 				this.S = s;
 				this.F = f;
 				this.W = w;
 				this.Value = value;
 				this.Description = decs;
+				this.ValueSingular = singular;
 			}
 
 			public byte S { get; set; }
@@ -179,6 +205,7 @@ namespace HslCommunicationDemo
 			public bool W { get; set; }
 			public SecsValue Value { get; set; }
 			public string Description { get; set; }
+			public SecsValue ValueSingular { get; set; }
 		}
 
 		private void Language( int language )
@@ -215,18 +242,19 @@ namespace HslCommunicationDemo
 
 		private void button1_Click( object sender, EventArgs e )
 		{
-			if(!int.TryParse(textBox2.Text,out int port ))
+			if(!int.TryParse(textBox_port.Text,out int port ))
 			{
 				MessageBox.Show( DemoUtils.PortInputWrong );
 				return;
 			}
 
 			secs?.ConnectClose( );
-			secs = new SecsHsms( textBox3.Text, port );
+			secs = new SecsHsms( textBox_ip.Text, port );
 			secs.DeviceID = ushort.Parse( textBox_deviceID.Text );
-			secs.LogNet = new HslCommunication.LogNet.LogNetSingle( "" );
-			secs.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
 			secs.OnSecsMessageReceived += Secs_OnSecsMessageReceived;
+			secs.InitializationS0F0 = checkBox2.Checked;
+			ComboBox1_SelectedIndexChanged( comboBox1, e );
+
 			secs.LogNet = LogNet;
 			try
 			{
@@ -253,9 +281,15 @@ namespace HslCommunicationDemo
 
 		private void Secs_OnSecsMessageReceived( object sender, SecsMessage secsMessage )
 		{
-			// 当接收到数据返回的非应答数据时，需要处理的方法代码
-			secs.LogNet?.WriteDebug( secs.ToString( ), secsMessage.ToString( ) );
+			// 当接收到数据返回的非应答数据时，需要处理的方法代码，此处只是显示
+			if (InvokeRequired)
+			{
+				Invoke( new Action<object, SecsMessage>( Secs_OnSecsMessageReceived ), sender, secsMessage );
+				return;
+			}
 
+			if (!checkBox1.Checked)
+				textBox_log.AppendText( DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss.fff" ) + " " + secsMessage.ToString( ) + Environment.NewLine );
 		}
 
 		private void LogNet_BeforeSaveToFile( object sender, HslCommunication.LogNet.HslEventArgs e )
@@ -266,7 +300,8 @@ namespace HslCommunicationDemo
 				return;
 			}
 
-			textBox10.AppendText( e.HslMessage.ToString( ) + Environment.NewLine );
+			if (checkBox1.Checked)
+				textBox_log.AppendText( e.HslMessage.ToString( ) + Environment.NewLine );
 		}
 
 
@@ -281,15 +316,21 @@ namespace HslCommunicationDemo
 
 		#endregion
 
-		#region 批量读取测试
+		#region 读取测试
 
 		private void button25_Click( object sender, EventArgs e )
 		{
-			OperateResult<SecsMessage> read = secs.ReadSecsMessage( byte.Parse( textBox_stream.Text ), byte.Parse( textBox_function.Text ), 
-				string.IsNullOrEmpty(textBox_data.Text) ? new SecsValue() : new SecsValue(XElement.Parse( textBox_data.Text ) ), checkBox_back.Checked );
+			SecsValue secsValue = string.IsNullOrEmpty( textBox_data.Text ) ?
+				new SecsValue( ) :
+				new SecsValue( XElement.Parse( textBox_data.Text ) );
+
+			OperateResult<SecsMessage> read = secs.ReadSecsMessage( byte.Parse( textBox_stream.Text ), byte.Parse( textBox_function.Text ),
+				secsValue, 
+				checkBox_back.Checked );
 			if (read.IsSuccess)
 			{
-				textBox_receive.Text = DateTime.Now.ToString( "HH:mm:ss" ) + ": " + Environment.NewLine + read.Content.GetItemValues()?.ToString( );
+				// 修改左边树形菜单的默认值
+				textBox_receive.Text = DateTime.Now.ToString( "HH:mm:ss" ) + ": " + Environment.NewLine + read.Content.GetItemValues( )?.ToString( );
 			}
 			else
 			{
@@ -300,7 +341,10 @@ namespace HslCommunicationDemo
 		private void button3_Click( object sender, EventArgs e )
 		{
 			OperateResult send = secs.SendByCommand( byte.Parse( textBox_stream.Text ), byte.Parse( textBox_function.Text ),
-				string.IsNullOrEmpty( textBox_data.Text ) ? new byte[0] : new SecsValue( XElement.Parse( textBox_data.Text ) ).ToSourceBytes( ), checkBox_back.Checked );
+				string.IsNullOrEmpty( textBox_data.Text ) ? 
+				SecsValue.EmptySecsValue( ) : 
+				new SecsValue( XElement.Parse( textBox_data.Text ) ), 
+				checkBox_back.Checked );
 			if (send.IsSuccess)
 			{
 			   MessageBox.Show( "发送成功！" );
@@ -319,15 +363,21 @@ namespace HslCommunicationDemo
 
 		public override void SaveXmlParameter( XElement element )
 		{
-			element.SetAttributeValue( DemoDeviceList.XmlBaudRate, textBox2.Text );
-			element.SetAttributeValue( DemoDeviceList.XmlStation, textBox_deviceID.Text );
+			element.SetAttributeValue( DemoDeviceList.XmlIpAddress, textBox_ip.Text );
+			element.SetAttributeValue( DemoDeviceList.XmlBaudRate,  textBox_port.Text );
+			element.SetAttributeValue( DemoDeviceList.XmlStation,   textBox_deviceID.Text );
+			element.SetAttributeValue( "Encoding",                  comboBox1.SelectedIndex );
+			element.SetAttributeValue( "S0F0", checkBox2.Checked );
 		}
 
 		public override void LoadXmlParameter( XElement element )
 		{
 			base.LoadXmlParameter( element );
-			textBox2.Text = element.Attribute( DemoDeviceList.XmlBaudRate ).Value;
-			textBox_deviceID.Text = element.Attribute( DemoDeviceList.XmlStation ).Value;
+			textBox_ip.Text           = SoftBasic.GetXmlValue( element, DemoDeviceList.XmlIpAddress, "127.0.0.1" );
+			textBox_port.Text         = element.Attribute( DemoDeviceList.XmlBaudRate ).Value;
+			textBox_deviceID.Text     = element.Attribute( DemoDeviceList.XmlStation ).Value;
+			comboBox1.SelectedIndex   = SoftBasic.GetXmlValue( element, "Encoding", 1 );
+			checkBox2.Checked         = SoftBasic.GetXmlValue( element, "S0F0", false );
 		}
 
 		private void userControlHead1_SaveConnectEvent_1( object sender, EventArgs e )
@@ -415,6 +465,11 @@ namespace HslCommunicationDemo
 			{
 				MessageBox.Show( "Read failed: " + read.Message );
 			}
+		}
+
+		private void button4_Click_1( object sender, EventArgs e )
+		{
+			textBox_log.Clear( );
 		}
 	}
 }

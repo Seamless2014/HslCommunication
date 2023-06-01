@@ -71,6 +71,11 @@ namespace HslCommunicationDemo
 
 		private async void button1_Click( object sender, EventArgs e )
 		{
+			if (checkBox_rsa.Checked && checkBox_SslTls.Checked)
+			{
+				MessageBox.Show( "无法同时勾选RSA加密通信及SSL加密通信！\r\nIt is not possible to check both RSA encryption and SSL encryption options." );
+				return;
+			}
 			// 连接
 			MqttConnectionOptions options = new MqttConnectionOptions( )
 			{
@@ -79,6 +84,8 @@ namespace HslCommunicationDemo
 				ClientId        = textBox3.Text,
 				KeepAlivePeriod = TimeSpan.FromSeconds(int.Parse(textBox6.Text)),
 				UseRSAProvider  = checkBox_rsa.Checked,
+				CleanSession    = true,
+				UseSSL          = checkBox_SslTls.Checked,
 			};
 			if(!string.IsNullOrEmpty(textBox9.Text) || !string.IsNullOrEmpty( textBox10.Text ))
 			{
@@ -92,6 +99,8 @@ namespace HslCommunicationDemo
 					Payload = Encoding.UTF8.GetBytes( this.mqtt_will_message )
 				};
 			}
+			options.CertificateFile = textBox_certificate.Text;
+			options.SSLSecure = checkBox_sslSecure.Checked;
 
 			button1.Enabled = false;
 			mqttClient?.ConnectClose( );
@@ -243,7 +252,7 @@ namespace HslCommunicationDemo
 				{
 					QualityOfServiceLevel = level,
 					Topic                 = textBox5.Text,
-					Payload               = Encoding.UTF8.GetBytes( textBox4.Text ),
+					Payload               = checkBox_publish_isHex.Checked ? textBox4.Text.ToHexBytes( ) : Encoding.UTF8.GetBytes( textBox4.Text ),
 					Retain                = checkBox1.Checked                        // 如果为TRUE，该消息在服务器上进行驻留保存，方便客户端连上立即推送
 				} );
 
@@ -313,6 +322,10 @@ namespace HslCommunicationDemo
 			element.SetAttributeValue( DemoDeviceList.XmlPassword, textBox10.Text );
 			element.SetAttributeValue( "WillTopic", mqtt_will_topic );
 			element.SetAttributeValue( "WillMessage", mqtt_will_message );
+			element.SetAttributeValue( "certificate", textBox_certificate.Text );
+			element.SetAttributeValue( "sslSecure", checkBox_sslSecure.Checked );
+			element.SetAttributeValue( "rsa", checkBox_rsa.Checked );
+			element.SetAttributeValue( "SSLTLS", checkBox_SslTls.Checked );
 		}
 
 		public override void LoadXmlParameter( XElement element )
@@ -327,6 +340,10 @@ namespace HslCommunicationDemo
 			textBox10.Text  = element.Attribute( DemoDeviceList.XmlPassword ).Value;
 			mqtt_will_topic = element.Attribute( "WillTopic" ) == null ? string.Empty : element.Attribute( "WillTopic" ).Value;
 			mqtt_will_message = element.Attribute( "WillMessage" ) == null ? string.Empty : element.Attribute( "WillMessage" ).Value;
+			textBox_certificate.Text = element.Attribute( "certificate" ) == null ? string.Empty : element.Attribute( "certificate" ).Value;
+			checkBox_sslSecure.Checked = element.Attribute( "sslSecure" ) == null ? false : bool.Parse( element.Attribute( "sslSecure" ).Value );
+			checkBox_rsa.Checked = element.Attribute( "rsa" ) == null ? false : bool.Parse( element.Attribute( "rsa" ).Value );
+			checkBox_SslTls.Checked = GetXmlValue( element, "SSLTLS", false, bool.Parse );
 		}
 
 		private void userControlHead1_SaveConnectEvent_1( object sender, EventArgs e )
@@ -346,6 +363,23 @@ namespace HslCommunicationDemo
 				{
 					mqtt_will_topic = form.Topic;
 					mqtt_will_message = form.Message;
+				}
+			}
+		}
+
+		private void button3_Click( object sender, EventArgs e )
+		{
+			FormMqttSubscribe form = new FormMqttSubscribe( mqttClient );
+			form.Show( );
+		}
+
+		private void button_certificate_Click( object sender, EventArgs e )
+		{
+			using(OpenFileDialog ofd = new OpenFileDialog( ))
+			{
+				if(ofd.ShowDialog() == DialogResult.OK)
+				{
+					textBox_certificate.Text = ofd.FileName;
 				}
 			}
 		}

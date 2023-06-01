@@ -41,6 +41,7 @@
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.textBox_regex = new System.Windows.Forms.TextBox();
 			this.button3 = new System.Windows.Forms.Button();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.panel2 = new System.Windows.Forms.Panel();
@@ -59,7 +60,6 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
-			this.textBox_regex = new System.Windows.Forms.TextBox();
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -90,12 +90,12 @@
 			this.panel1.Location = new System.Drawing.Point(2, 34);
 			this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(999, 40);
+			this.panel1.Size = new System.Drawing.Size(976, 40);
 			this.panel1.TabIndex = 8;
 			// 
 			// textBox16
 			// 
-			this.textBox16.Location = new System.Drawing.Point(576, 7);
+			this.textBox16.Location = new System.Drawing.Point(530, 7);
 			this.textBox16.Name = "textBox16";
 			this.textBox16.Size = new System.Drawing.Size(159, 23);
 			this.textBox16.TabIndex = 19;
@@ -103,7 +103,7 @@
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(520, 10);
+			this.label8.Location = new System.Drawing.Point(474, 10);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(50, 17);
 			this.label8.TabIndex = 18;
@@ -111,7 +111,7 @@
 			// 
 			// textBox15
 			// 
-			this.textBox15.Location = new System.Drawing.Point(469, 7);
+			this.textBox15.Location = new System.Drawing.Point(423, 7);
 			this.textBox15.Name = "textBox15";
 			this.textBox15.Size = new System.Drawing.Size(32, 23);
 			this.textBox15.TabIndex = 17;
@@ -120,7 +120,7 @@
 			// label23
 			// 
 			this.label23.AutoSize = true;
-			this.label23.Location = new System.Drawing.Point(425, 10);
+			this.label23.Location = new System.Drawing.Point(379, 10);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(41, 17);
 			this.label23.TabIndex = 16;
@@ -129,7 +129,7 @@
 			// button2
 			// 
 			this.button2.Enabled = false;
-			this.button2.Location = new System.Drawing.Point(876, 4);
+			this.button2.Location = new System.Drawing.Point(792, 4);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(91, 28);
 			this.button2.TabIndex = 5;
@@ -139,7 +139,7 @@
 			// 
 			// button1
 			// 
-			this.button1.Location = new System.Drawing.Point(779, 4);
+			this.button1.Location = new System.Drawing.Point(695, 4);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(91, 28);
 			this.button1.TabIndex = 4;
@@ -151,7 +151,7 @@
 			// 
 			this.textBox2.Location = new System.Drawing.Point(276, 7);
 			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(141, 23);
+			this.textBox2.Size = new System.Drawing.Size(93, 23);
 			this.textBox2.TabIndex = 3;
 			this.textBox2.Text = "44818";
 			// 
@@ -198,9 +198,16 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.panel2);
-			this.splitContainer1.Size = new System.Drawing.Size(993, 537);
-			this.splitContainer1.SplitterDistance = 224;
+			this.splitContainer1.Size = new System.Drawing.Size(970, 539);
+			this.splitContainer1.SplitterDistance = 218;
 			this.splitContainer1.TabIndex = 9;
+			// 
+			// textBox_regex
+			// 
+			this.textBox_regex.Location = new System.Drawing.Point(3, 6);
+			this.textBox_regex.Name = "textBox_regex";
+			this.textBox_regex.Size = new System.Drawing.Size(129, 23);
+			this.textBox_regex.TabIndex = 2;
 			// 
 			// button3
 			// 
@@ -219,7 +226,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView1.Location = new System.Drawing.Point(3, 32);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(213, 502);
+			this.treeView1.Size = new System.Drawing.Size(207, 504);
 			this.treeView1.TabIndex = 0;
 			this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
 			// 
@@ -229,7 +236,7 @@
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(0, 0);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(765, 537);
+			this.panel2.Size = new System.Drawing.Size(748, 539);
 			this.panel2.TabIndex = 0;
 			// 
 			// panel4
@@ -241,13 +248,13 @@
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel4.Location = new System.Drawing.Point(0, 0);
 			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(765, 537);
+			this.panel4.Size = new System.Drawing.Size(748, 539);
 			this.panel4.TabIndex = 5;
 			// 
 			// button4
 			// 
 			this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button4.Location = new System.Drawing.Point(665, 3);
+			this.button4.Location = new System.Drawing.Point(648, 3);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(91, 27);
 			this.button4.TabIndex = 6;
@@ -279,7 +286,7 @@
 			this.dataGridView1.ReadOnly = true;
 			this.dataGridView1.RowHeadersVisible = false;
 			this.dataGridView1.RowTemplate.Height = 23;
-			this.dataGridView1.Size = new System.Drawing.Size(753, 499);
+			this.dataGridView1.Size = new System.Drawing.Size(736, 501);
 			this.dataGridView1.TabIndex = 5;
 			// 
 			// Column_number
@@ -339,7 +346,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox4.Location = new System.Drawing.Point(73, 6);
 			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(586, 23);
+			this.textBox4.Size = new System.Drawing.Size(569, 23);
 			this.textBox4.TabIndex = 1;
 			// 
 			// panel3
@@ -350,16 +357,16 @@
 			this.panel3.Controls.Add(this.splitContainer1);
 			this.panel3.Location = new System.Drawing.Point(2, 77);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(999, 543);
+			this.panel3.Size = new System.Drawing.Size(976, 545);
 			this.panel3.TabIndex = 10;
 			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 623);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 625);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(1004, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(981, 22);
 			this.statusStrip1.TabIndex = 11;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -380,23 +387,16 @@
 			this.userControlHead1.MinimumSize = new System.Drawing.Size(800, 32);
 			this.userControlHead1.Name = "userControlHead1";
 			this.userControlHead1.ProtocolInfo = "CIP";
-			this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
+			this.userControlHead1.Size = new System.Drawing.Size(981, 32);
 			this.userControlHead1.TabIndex = 12;
 			this.userControlHead1.SaveConnectEvent += new System.EventHandler<System.EventArgs>(this.userControlHead1_SaveConnectEvent_1);
-			// 
-			// textBox_regex
-			// 
-			this.textBox_regex.Location = new System.Drawing.Point(3, 6);
-			this.textBox_regex.Name = "textBox_regex";
-			this.textBox_regex.Size = new System.Drawing.Size(129, 23);
-			this.textBox_regex.TabIndex = 2;
 			// 
 			// FormAllenBrandlyBrowser
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoScroll = true;
-			this.ClientSize = new System.Drawing.Size(1004, 645);
+			this.ClientSize = new System.Drawing.Size(981, 647);
 			this.Controls.Add(this.userControlHead1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.panel3);

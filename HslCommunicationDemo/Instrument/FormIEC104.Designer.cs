@@ -40,21 +40,23 @@
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.userControlReadWriteOp1 = new HslCommunicationDemo.DemoControl.UserControlReadWriteOp();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.button4 = new System.Windows.Forms.Button();
+			this.button_u_test = new System.Windows.Forms.Button();
+			this.button_u_stop = new System.Windows.Forms.Button();
+			this.button_u_start = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
+			this.textBox4 = new System.Windows.Forms.TextBox();
 			this.button3 = new System.Windows.Forms.Button();
 			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textBox10 = new System.Windows.Forms.TextBox();
 			this.label13 = new System.Windows.Forms.Label();
-			this.button25 = new System.Windows.Forms.Button();
+			this.button_read_batch = new System.Windows.Forms.Button();
 			this.textBox9 = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.textBox6 = new System.Windows.Forms.TextBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
 			this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
-			this.textBox4 = new System.Windows.Forms.TextBox();
-			this.button5 = new System.Windows.Forms.Button();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -169,7 +171,7 @@
 			// 
 			this.userControlReadWriteOp1.Location = new System.Drawing.Point(4, 2);
 			this.userControlReadWriteOp1.Name = "userControlReadWriteOp1";
-			this.userControlReadWriteOp1.Size = new System.Drawing.Size(988, 240);
+			this.userControlReadWriteOp1.Size = new System.Drawing.Size(988, 272);
 			this.userControlReadWriteOp1.TabIndex = 5;
 			// 
 			// groupBox3
@@ -177,36 +179,77 @@
 			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Controls.Add(this.button_u_test);
+			this.groupBox3.Controls.Add(this.button_u_stop);
+			this.groupBox3.Controls.Add(this.button_u_start);
 			this.groupBox3.Controls.Add(this.button5);
 			this.groupBox3.Controls.Add(this.textBox4);
-			this.groupBox3.Controls.Add(this.button4);
 			this.groupBox3.Controls.Add(this.button3);
 			this.groupBox3.Controls.Add(this.textBox1);
 			this.groupBox3.Controls.Add(this.label2);
 			this.groupBox3.Controls.Add(this.textBox10);
 			this.groupBox3.Controls.Add(this.label13);
-			this.groupBox3.Controls.Add(this.button25);
+			this.groupBox3.Controls.Add(this.button_read_batch);
 			this.groupBox3.Controls.Add(this.textBox9);
 			this.groupBox3.Controls.Add(this.label12);
 			this.groupBox3.Controls.Add(this.textBox6);
 			this.groupBox3.Controls.Add(this.label11);
 			this.groupBox3.Controls.Add(this.checkBox1);
-			this.groupBox3.Location = new System.Drawing.Point(4, 243);
+			this.groupBox3.Location = new System.Drawing.Point(4, 280);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(988, 301);
+			this.groupBox3.Size = new System.Drawing.Size(988, 264);
 			this.groupBox3.TabIndex = 2;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "批量读取测试";
 			// 
-			// button4
+			// button_u_test
 			// 
-			this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button4.Location = new System.Drawing.Point(901, 47);
-			this.button4.Name = "button4";
-			this.button4.Size = new System.Drawing.Size(81, 28);
-			this.button4.TabIndex = 14;
-			this.button4.Text = "U帧报文";
-			this.button4.UseVisualStyleBackColor = true;
+			this.button_u_test.Location = new System.Drawing.Point(607, 19);
+			this.button_u_test.Name = "button_u_test";
+			this.button_u_test.Size = new System.Drawing.Size(81, 28);
+			this.button_u_test.TabIndex = 21;
+			this.button_u_test.Text = "U-Test";
+			this.button_u_test.UseVisualStyleBackColor = true;
+			this.button_u_test.Click += new System.EventHandler(this.button_u_test_Click);
+			// 
+			// button_u_stop
+			// 
+			this.button_u_stop.Location = new System.Drawing.Point(520, 19);
+			this.button_u_stop.Name = "button_u_stop";
+			this.button_u_stop.Size = new System.Drawing.Size(81, 28);
+			this.button_u_stop.TabIndex = 20;
+			this.button_u_stop.Text = "U-Stop";
+			this.button_u_stop.UseVisualStyleBackColor = true;
+			this.button_u_stop.Click += new System.EventHandler(this.button_u_stop_Click);
+			// 
+			// button_u_start
+			// 
+			this.button_u_start.Location = new System.Drawing.Point(433, 19);
+			this.button_u_start.Name = "button_u_start";
+			this.button_u_start.Size = new System.Drawing.Size(81, 28);
+			this.button_u_start.TabIndex = 19;
+			this.button_u_start.Text = "U-Start";
+			this.button_u_start.UseVisualStyleBackColor = true;
+			this.button_u_start.Click += new System.EventHandler(this.button_u_start_Click);
+			// 
+			// button5
+			// 
+			this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button5.Location = new System.Drawing.Point(929, 16);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(53, 28);
+			this.button5.TabIndex = 18;
+			this.button5.Text = "时间";
+			this.button5.UseVisualStyleBackColor = true;
+			this.button5.Click += new System.EventHandler(this.button5_Click);
+			// 
+			// textBox4
+			// 
+			this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox4.Location = new System.Drawing.Point(761, 19);
+			this.textBox4.Name = "textBox4";
+			this.textBox4.Size = new System.Drawing.Size(156, 23);
+			this.textBox4.TabIndex = 17;
 			// 
 			// button3
 			// 
@@ -246,7 +289,7 @@
 			this.textBox10.Multiline = true;
 			this.textBox10.Name = "textBox10";
 			this.textBox10.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox10.Size = new System.Drawing.Size(925, 216);
+			this.textBox10.Size = new System.Drawing.Size(925, 179);
 			this.textBox10.TabIndex = 10;
 			// 
 			// label13
@@ -258,21 +301,21 @@
 			this.label13.TabIndex = 9;
 			this.label13.Text = "结果：";
 			// 
-			// button25
+			// button_read_batch
 			// 
-			this.button25.Location = new System.Drawing.Point(360, 19);
-			this.button25.Name = "button25";
-			this.button25.Size = new System.Drawing.Size(82, 28);
-			this.button25.TabIndex = 8;
-			this.button25.Text = "批量读取";
-			this.button25.UseVisualStyleBackColor = true;
-			this.button25.Click += new System.EventHandler(this.button25_Click);
+			this.button_read_batch.Location = new System.Drawing.Point(305, 19);
+			this.button_read_batch.Name = "button_read_batch";
+			this.button_read_batch.Size = new System.Drawing.Size(82, 28);
+			this.button_read_batch.TabIndex = 8;
+			this.button_read_batch.Text = "批量读取";
+			this.button_read_batch.UseVisualStyleBackColor = true;
+			this.button_read_batch.Click += new System.EventHandler(this.button25_Click);
 			// 
 			// textBox9
 			// 
 			this.textBox9.Location = new System.Drawing.Point(239, 22);
 			this.textBox9.Name = "textBox9";
-			this.textBox9.Size = new System.Drawing.Size(102, 23);
+			this.textBox9.Size = new System.Drawing.Size(60, 23);
 			this.textBox9.TabIndex = 7;
 			this.textBox9.Text = "10";
 			// 
@@ -327,25 +370,6 @@
 			this.userControlHead1.TabIndex = 2;
 			this.userControlHead1.SaveConnectEvent += new System.EventHandler<System.EventArgs>(this.userControlHead1_SaveConnectEvent_1);
 			// 
-			// textBox4
-			// 
-			this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox4.Location = new System.Drawing.Point(761, 19);
-			this.textBox4.Name = "textBox4";
-			this.textBox4.Size = new System.Drawing.Size(156, 23);
-			this.textBox4.TabIndex = 17;
-			// 
-			// button5
-			// 
-			this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button5.Location = new System.Drawing.Point(929, 16);
-			this.button5.Name = "button5";
-			this.button5.Size = new System.Drawing.Size(53, 28);
-			this.button5.TabIndex = 18;
-			this.button5.Text = "时间";
-			this.button5.UseVisualStyleBackColor = true;
-			this.button5.Click += new System.EventHandler(this.button5_Click);
-			// 
 			// FormIEC104
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -380,7 +404,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox textBox10;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Button button25;
+        private System.Windows.Forms.Button button_read_batch;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox6;
@@ -393,12 +417,14 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textBox3;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Button button3;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox checkBox1;
 		private System.Windows.Forms.Button button5;
 		private System.Windows.Forms.TextBox textBox4;
-	}
+        private System.Windows.Forms.Button button_u_test;
+        private System.Windows.Forms.Button button_u_stop;
+        private System.Windows.Forms.Button button_u_start;
+    }
 }

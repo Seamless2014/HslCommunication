@@ -43,6 +43,13 @@ namespace HslCommunicationDemo
 			readNCToolStripMenuItem.Click += ReadNCToolStripMenuItem_Click;
 			deleteToolStripMenuItem.Click += DeleteToolStripMenuItem_Click;
 			Language( Program.Language );
+
+			panel4.Paint += Panel4_Paint;
+		}
+
+		private void Panel4_Paint( object sender, PaintEventArgs e )
+		{
+			e.Graphics.DrawRectangle( Pens.LightGray, new Rectangle( 0, 0, panel4.Width - 1, panel4.Height - 1 ) );
 		}
 
 		private void Language( int language )
@@ -79,7 +86,7 @@ namespace HslCommunicationDemo
 		{
 			fanuc?.ConnectClose( );
 			fanuc = new FanucSeries0i( textBox1.Text, int.Parse( textBox2.Text ) );
-
+			fanuc.LogNet = this.LogNet;
 			button1.Enabled = false;
 			OperateResult connect = await fanuc.ConnectServerAsync( );
 
@@ -122,6 +129,19 @@ namespace HslCommunicationDemo
 			}
 		}
 
+		private void button34_Click( object sender, EventArgs e )
+		{
+			// 操作信息
+			OperateResult<FanucOperatorMessage[]> read = fanuc.ReadOperatorMessage( );
+			if (read.IsSuccess)
+			{
+				textBox8.Text = read.Content.ToJsonString( );
+			}
+			else
+			{
+				MessageBox.Show( "Read Failed:" + read.ToMessageShowString( ) );
+			}
+		}
 		private void button3_Click( object sender, EventArgs e )
 		{
 			OperateResult<SysStatusInfo> read= fanuc.ReadSysStatusInfo( );
@@ -352,11 +372,12 @@ namespace HslCommunicationDemo
 				return;
 			}
 			button28.Enabled = false;
+			//OperateResult<string> read = fanuc.ReadProgram( programNum, textBox_path.Text );
 			OperateResult<string> read = await fanuc.ReadProgramAsync( programNum, textBox_path.Text );
 			button28.Enabled = true;
 			if (read.IsSuccess)
 			{
-				textBox8.Text = "程序内容：" + Environment.NewLine + read.Content;
+				textBox_program.Text = "程序内容：" + Environment.NewLine + read.Content;
 			}
 			else
 			{
@@ -436,7 +457,7 @@ namespace HslCommunicationDemo
 		}
 		private void button18_Click( object sender, EventArgs e )
 		{
-			if(!int.TryParse(textBox3.Text, out int address ))
+			if(!int.TryParse( textBox3.Text, out int address ))
 			{
 				MessageBox.Show( "宏变量地址输入错误！" );
 				return;
@@ -449,6 +470,47 @@ namespace HslCommunicationDemo
 			else
 			{
 				MessageBox.Show( "Read Failed:" + read.ToMessageShowString( ) );
+			}
+			//for (int i = 0; i < 10000; i++)
+			//{
+			//	OperateResult<double> read = await fanuc.ReadSystemMacroValueAsync( address + i );
+			//	if (read.IsSuccess)
+			//	{
+			//		textBox8.AppendText( $"{DateTime.Now} [{address + i}] : {read.Content}{Environment.NewLine}" );
+			//		if (read.Content.ToString( ) == "1000") break;
+			//	}
+			//	else
+			//	{
+			//		textBox8.AppendText( $"{DateTime.Now} [{address + i}] : failed{Environment.NewLine}" );
+			//		// MessageBox.Show( "Read Failed:" + read.ToMessageShowString( ) );
+			//	}
+			//}
+			//textBox8.AppendText( $"{DateTime.Now} Finish{Environment.NewLine}" );
+		}
+
+		private void button36_Click( object sender, EventArgs e )
+		{
+			// 写数据到宏变量
+			if (!int.TryParse( textBox3.Text, out int address ))
+			{
+				MessageBox.Show( "宏变量地址输入错误！" );
+				return;
+			}
+
+			if (!double.TryParse(textBox4.Text, out double value ))
+			{
+				MessageBox.Show( "写入宏变量的值输入错误！" );
+				return;
+			}
+
+			OperateResult read = fanuc.WriteSystemMacroValue( address, new double[] { value } );
+			if (read.IsSuccess)
+			{
+				MessageBox.Show( "Write Success!"  );
+			}
+			else
+			{
+				MessageBox.Show( "Write Failed:" + read.ToMessageShowString( ) );
 			}
 		}
 
@@ -543,7 +605,7 @@ namespace HslCommunicationDemo
 
 		private void panel3_Paint( object sender, PaintEventArgs e )
 		{
-			e.Graphics.DrawRectangle( Pens.Gray, new Rectangle( 0, 0, panel3.Width - 1, panel3.Height - 1 ) );
+			e.Graphics.DrawRectangle( Pens.LightGray, new Rectangle( 0, 0, panel3.Width - 1, panel3.Height - 1 ) );
 		}
 
 		private string GetPathFromTree( TreeNode treeNode )
@@ -570,7 +632,7 @@ namespace HslCommunicationDemo
 			{
 				if (!fileDirInfo.IsDirectory)
 				{
-					textBox8.Text = fileDirInfo.ToString( );
+					textBox_program.Text = fileDirInfo.ToString( );
 				}
 				else
 				{
@@ -584,7 +646,7 @@ namespace HslCommunicationDemo
 								list.Add( file.ToString( ) );
 						}
 					}
-					textBox8.Text = list.ToJsonString( );
+					textBox_program.Text = list.ToJsonString( );
 				}
 			}
 		}
@@ -657,13 +719,13 @@ namespace HslCommunicationDemo
 				if (fileDirInfo.IsDirectory) return;
 
 				string path = GetPathFromTree( treeNode.Parent );
-				int program = int.Parse( fileDirInfo.Name.Substring( 1 ) );
+				//int program = int.Parse( fileDirInfo.Name.Substring( 1 ) );
 
-
-				OperateResult<string> read = await fanuc.ReadProgramAsync( program, path );
+				//OperateResult<string> read = fanuc.ReadProgram( program, path );
+				OperateResult<string> read = await fanuc.ReadProgramAsync( fileDirInfo.Name, path );
 				if (read.IsSuccess)
 				{
-					textBox8.Text = "Program Content：" + Environment.NewLine + read.Content;
+					textBox_program.Text = $"Program Content[{path}]：" + Environment.NewLine + read.Content;
 				}
 				else
 				{
@@ -721,6 +783,13 @@ namespace HslCommunicationDemo
 			//	MessageBox.Show( "Read Failed:" + read.ToMessageShowString( ) );
 			//}
 		}
+
+		private void button35_Click( object sender, EventArgs e )
+		{
+			fanuc.OperatePath = short.Parse( textBox_op_path.Text );
+			MessageBox.Show( "Success!" );
+		}
+
 	}
 
 

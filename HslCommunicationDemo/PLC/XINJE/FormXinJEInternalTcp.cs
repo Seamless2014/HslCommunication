@@ -11,6 +11,7 @@ using System.Threading;
 using HslCommunication.Profinet.XINJE;
 using HslCommunication;
 using System.Xml.Linq;
+using HslCommunicationDemo.PLC.Common;
 
 namespace HslCommunicationDemo
 {
@@ -24,12 +25,16 @@ namespace HslCommunicationDemo
 
 
 		private XinJEInternalNet xinJE = null;
+		private SpecialFeaturesControl control;
 
 		private void FormSiemens_Load( object sender, EventArgs e )
 		{
 			panel2.Enabled = false;
 
 			Language( Program.Language );
+
+			control = new SpecialFeaturesControl( );
+			this.userControlReadWriteDevice1.AddSpecialFunctionTab( control );
 		}
 
 
@@ -43,19 +48,7 @@ namespace HslCommunicationDemo
 				label26.Text = "Port:";
 				button1.Text = "Connect";
 				button2.Text = "Disconnect";
-				label21.Text = "Address:";
-
-				label11.Text = "Address:";
-				label12.Text = "length:";
-				button25.Text = "Bulk Read";
-				label13.Text = "Results:";
-				label16.Text = "Message:";
-				label14.Text = "Results:";
-				button26.Text = "Read";
-
-				groupBox3.Text = "Bulk Read test";
-				groupBox4.Text = "Message reading test, hex string needs to be filled in";
-				groupBox5.Text = "Special function test";
+				label_station.Text = "Station:";
 			}
 		}
 
@@ -82,7 +75,7 @@ namespace HslCommunicationDemo
 
 			try
 			{
-				xinJE.Station = byte.Parse( textBox15.Text );
+				xinJE.Station = byte.Parse( textBox_station.Text );
 				OperateResult connect = xinJE.ConnectServer( );
 				if (connect.IsSuccess)
 				{
@@ -92,7 +85,14 @@ namespace HslCommunicationDemo
 					button1.Enabled = false;
 					panel2.Enabled = true;
 
-					userControlReadWriteOp1.SetReadWriteNet( xinJE, "D100", true );
+					// 设置基本的读写信息
+					userControlReadWriteDevice1.ReadWriteOp.SetReadWriteNet( xinJE, "D100", true );
+					// 设置批量读取
+					userControlReadWriteDevice1.BatchRead.SetReadWriteNet( xinJE, "D100", string.Empty );
+					// 设置报文读取
+					userControlReadWriteDevice1.MessageRead.SetReadSourceBytes( m => xinJE.ReadFromCoreServer(m, hasResponseData: true, usePackAndUnpack: false ), string.Empty, string.Empty );
+
+					control.SetDevice( xinJE, "D100" );
 				}
 				else
 				{
@@ -119,36 +119,6 @@ namespace HslCommunicationDemo
 
 		#endregion
 
-		#region 批量读取测试
-
-		private void button25_Click( object sender, EventArgs e )
-		{
-			DemoUtils.BulkReadRenderResult( xinJE, textBox6, textBox9, textBox10 );
-		}
-
-
-
-		#endregion
-
-		#region 报文读取测试
-
-
-		private void button26_Click( object sender, EventArgs e )
-		{
-			OperateResult<byte[]> read = xinJE.ReadFromCoreServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
-			if (read.IsSuccess)
-			{
-				textBox11.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
-			}
-			else
-			{
-				MessageBox.Show( "Read Failed：" + read.ToMessageShowString( ) );
-			}
-		}
-
-
-		#endregion
-		
 		#region 测试使用
 
 		private void test3( )
@@ -212,7 +182,7 @@ namespace HslCommunicationDemo
 		{
 			element.SetAttributeValue( DemoDeviceList.XmlIpAddress, textBox1.Text );
 			element.SetAttributeValue( DemoDeviceList.XmlPort, textBox2.Text );
-			element.SetAttributeValue( DemoDeviceList.XmlStation, textBox15.Text );
+			element.SetAttributeValue( DemoDeviceList.XmlStation, textBox_station.Text );
 		}
 
 		public override void LoadXmlParameter( XElement element )
@@ -220,7 +190,7 @@ namespace HslCommunicationDemo
 			base.LoadXmlParameter( element );
 			textBox1.Text = element.Attribute( DemoDeviceList.XmlIpAddress ).Value;
 			textBox2.Text = element.Attribute( DemoDeviceList.XmlPort ).Value;
-			textBox15.Text = element.Attribute( DemoDeviceList.XmlStation ).Value;
+			textBox_station.Text = element.Attribute( DemoDeviceList.XmlStation ).Value;
 		}
 
 		private void userControlHead1_SaveConnectEvent_1( object sender, EventArgs e )

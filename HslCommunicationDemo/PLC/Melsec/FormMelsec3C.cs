@@ -80,25 +80,12 @@ namespace HslCommunicationDemo
 				label25.Text = "Data bits";
 				button1.Text = "Connect";
 				button2.Text = "Disconnect";
-				button3.Text = "Start Plc";
-				button4.Text = "Stop Plc";
 				label21.Text = "Address:";
-
-				label11.Text = "Address:";
-				label12.Text = "length:";
-				button25.Text = "Bulk Read";
-				label13.Text = "Results:";
-				label16.Text = "Message:";
-				label14.Text = "Results:";
-				button26.Text = "Read";
-
-
-				groupBox3.Text = "Bulk Read test";
-				groupBox4.Text = "Message reading test, hex string needs to be filled in";
-				groupBox5.Text = "Special function test";
-
-				button3.Text = "Pressure test, r/w 3,000s";
 				comboBox1.DataSource = new string[] { "None", "Odd", "Even" };
+			}
+			else
+			{
+				checkBox_EnableWriteBitToWordRegister.Text = "支持使用位写入字寄存器(实际读字，修改位，写字)";
 			}
 		}
 
@@ -135,7 +122,7 @@ namespace HslCommunicationDemo
 			melsecA3C?.Close( );
 			melsecA3C = new MelsecA3CNet( );
 			melsecA3C.LogNet = LogNet;
-			
+			melsecA3C.EnableWriteBitToWordRegister = checkBox_EnableWriteBitToWordRegister.Checked;
 			try
 			{
 				melsecA3C.SerialPortInni( sp =>
@@ -155,7 +142,13 @@ namespace HslCommunicationDemo
 				button2.Enabled = true;
 				button1.Enabled = false;
 				panel2.Enabled = true;
-				userControlReadWriteOp1.SetReadWriteNet( melsecA3C, "D100", false );
+
+				// 设置基本的读写信息
+				userControlReadWriteDevice1.ReadWriteOp.SetReadWriteNet( melsecA3C, "D100", false );
+				// 设置批量读取
+				userControlReadWriteDevice1.BatchRead.SetReadWriteNet( melsecA3C, "D100", string.Empty );
+				// 设置报文读取
+				userControlReadWriteDevice1.MessageRead.SetReadSourceBytes( m => melsecA3C.ReadFromCoreServer( m, true, false ), string.Empty, string.Empty );
 			}
 			catch (Exception ex)
 			{
@@ -176,35 +169,6 @@ namespace HslCommunicationDemo
 
 		#endregion
 
-		#region 批量读取测试
-
-		private void button25_Click( object sender, EventArgs e )
-		{
-			DemoUtils.BulkReadRenderResult( melsecA3C, textBox6, textBox9, textBox10 );
-		}
-
-
-		#endregion
-
-		#region 报文读取测试
-
-
-		private void button26_Click( object sender, EventArgs e )
-		{
-			OperateResult<byte[]> read = melsecA3C.ReadFromCoreServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
-			if (read.IsSuccess)
-			{
-				textBox11.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
-			}
-			else
-			{
-				MessageBox.Show( "Read Failed：" + read.ToMessageShowString( ) );
-			}
-		}
-
-
-		#endregion
-		
 		#region Use Exmaple
 
 		private void test1()
@@ -307,33 +271,6 @@ namespace HslCommunicationDemo
 
 		#endregion
 
-		private void button3_Click_1( object sender, EventArgs e )
-		{
-			//OperateResult operate = melsecA3C.StartPLC( );
-			//if(!operate.IsSuccess)
-			//{
-			//    MessageBox.Show( "启动失败：" + operate.Message );
-			//}
-			//else
-			//{
-			//    MessageBox.Show( "启动成功" );
-			//}
-		}
-
-		private void button4_Click( object sender, EventArgs e )
-		{
-
-			//OperateResult operate = melsecA3C.StopPLC( );
-			//if (!operate.IsSuccess)
-			//{
-			//    MessageBox.Show( "停止失败：" + operate.Message );
-			//}
-			//else
-			//{
-			//    MessageBox.Show( "停止成功" );
-			//}
-		}
-
 
 		public override void SaveXmlParameter( XElement element )
 		{
@@ -343,6 +280,7 @@ namespace HslCommunicationDemo
 			element.SetAttributeValue( DemoDeviceList.XmlStopBit, textBox17.Text );
 			element.SetAttributeValue( DemoDeviceList.XmlParity, comboBox1.SelectedIndex );
 			element.SetAttributeValue( DemoDeviceList.XmlStation, textBox15.Text );
+			element.SetAttributeValue( "EnableWriteBitToWordRegister", checkBox_EnableWriteBitToWordRegister.Text );
 		}
 
 		public override void LoadXmlParameter( XElement element )
@@ -354,6 +292,7 @@ namespace HslCommunicationDemo
 			textBox17.Text = element.Attribute( DemoDeviceList.XmlStopBit ).Value;
 			comboBox1.SelectedIndex = int.Parse( element.Attribute( DemoDeviceList.XmlParity ).Value );
 			textBox15.Text = element.Attribute( DemoDeviceList.XmlStation ).Value;
+			checkBox_EnableWriteBitToWordRegister.Checked = GetXmlValue( element, "EnableWriteBitToWordRegister", false, bool.Parse );
 		}
 
 		private void userControlHead1_SaveConnectEvent_1( object sender, EventArgs e )

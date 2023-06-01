@@ -57,6 +57,8 @@
 			this.textBox5 = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
+			this.checkBox_publish_isHex = new System.Windows.Forms.CheckBox();
+			this.checkBox_receive_isHex = new System.Windows.Forms.CheckBox();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.SuspendLayout();
@@ -153,6 +155,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panel2.Controls.Add(this.checkBox_receive_isHex);
+			this.panel2.Controls.Add(this.checkBox_publish_isHex);
 			this.panel2.Controls.Add(this.checkBox_long_message_hide);
 			this.panel2.Controls.Add(this.listBox1);
 			this.panel2.Controls.Add(this.label5);
@@ -291,7 +295,7 @@
 			// label12
 			// 
 			this.label12.AutoSize = true;
-			this.label12.Location = new System.Drawing.Point(8, 217);
+			this.label12.Location = new System.Drawing.Point(3, 217);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(64, 17);
 			this.label12.TabIndex = 19;
@@ -332,7 +336,7 @@
 			// label9
 			// 
 			this.label9.AutoSize = true;
-			this.label9.Location = new System.Drawing.Point(8, 39);
+			this.label9.Location = new System.Drawing.Point(3, 39);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(66, 17);
 			this.label9.TabIndex = 11;
@@ -358,7 +362,7 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(8, 11);
+			this.label7.Location = new System.Drawing.Point(2, 11);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(52, 17);
 			this.label7.TabIndex = 7;
@@ -378,6 +382,26 @@
 			this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
 			this.userControlHead1.TabIndex = 14;
 			this.userControlHead1.SaveConnectEvent += new System.EventHandler<System.EventArgs>(this.userControlHead1_SaveConnectEvent_1);
+			// 
+			// checkBox_publish_isHex
+			// 
+			this.checkBox_publish_isHex.AutoSize = true;
+			this.checkBox_publish_isHex.Location = new System.Drawing.Point(5, 62);
+			this.checkBox_publish_isHex.Name = "checkBox_publish_isHex";
+			this.checkBox_publish_isHex.Size = new System.Drawing.Size(55, 21);
+			this.checkBox_publish_isHex.TabIndex = 36;
+			this.checkBox_publish_isHex.Text = "Hex?";
+			this.checkBox_publish_isHex.UseVisualStyleBackColor = true;
+			// 
+			// checkBox_receive_isHex
+			// 
+			this.checkBox_receive_isHex.AutoSize = true;
+			this.checkBox_receive_isHex.Location = new System.Drawing.Point(5, 237);
+			this.checkBox_receive_isHex.Name = "checkBox_receive_isHex";
+			this.checkBox_receive_isHex.Size = new System.Drawing.Size(55, 21);
+			this.checkBox_receive_isHex.TabIndex = 37;
+			this.checkBox_receive_isHex.Text = "Hex?";
+			this.checkBox_receive_isHex.UseVisualStyleBackColor = true;
 			// 
 			// FormMqttServer
 			// 
@@ -432,5 +456,7 @@
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.CheckBox checkBox2;
 		private System.Windows.Forms.CheckBox checkBox_long_message_hide;
+		private System.Windows.Forms.CheckBox checkBox_publish_isHex;
+		private System.Windows.Forms.CheckBox checkBox_receive_isHex;
 	}
 }
